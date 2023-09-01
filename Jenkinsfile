@@ -2,11 +2,14 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Deploy') {
+            when {
+              expression {
+                currentBuild.result == null || currentBuild.result == 'SUCCESS' 
+              }
+            }
             steps {
-                echo "compilation"
-                sh './make.sh' 
-                archiveArtifacts artifacts: 'code', fingerprint: true 
+                sh 'make publish'
             }
         }
     }
